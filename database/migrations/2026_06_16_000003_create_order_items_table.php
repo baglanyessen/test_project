@@ -18,10 +18,6 @@ return new class extends Migration
             $table->integer('quantity');
             $table->decimal('price', 10, 2);
             $table->timestamps();
-
-            // Indexes for fast lookups (although constrained adds them, it's good to be explicit or they are auto-added)
-            $table->index('order_id');
-            $table->index('product_id');
         });
     }
 

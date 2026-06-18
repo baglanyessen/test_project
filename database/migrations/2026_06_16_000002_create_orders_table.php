@@ -19,8 +19,6 @@ return new class extends Migration
             $table->enum('status', ['pending', 'confirmed', 'failed'])->default('pending');
             $table->text('fail_reason')->nullable();
             $table->timestamps();
-
-            // Index for faster queries on status
             $table->index('status');
         });
     }
