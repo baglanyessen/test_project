@@ -39,7 +39,7 @@ class OrderController extends Controller
         ], 202);
     }
 
-    public function show(int $id)
+    public function show(int $id): JsonResponse|OrderResource
     {
         $order = Order::with('items.product')->find($id);
 
