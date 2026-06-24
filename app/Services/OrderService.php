@@ -47,6 +47,7 @@ class OrderService
             }
 
             $productIds = $order->items->pluck('product_id')->toArray();
+            sort($productIds);
 
             $products = Product::whereIn('id', $productIds)->lockForUpdate()->get()->keyBy('id');
 
@@ -91,6 +92,8 @@ class OrderService
                 'status' => 'confirmed',
                 'total_amount' => $totalAmount,
             ]);
+
+            event(new \App\Events\OrderConfirmed($order));
         });
     }
 }

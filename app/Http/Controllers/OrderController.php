@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderRequest;
+use App\Http\Resources\OrderResource;
 use App\Jobs\ProcessOrderJob;
 use App\Models\Order;
 use App\Services\OrderService;
@@ -38,7 +39,7 @@ class OrderController extends Controller
         ], 202);
     }
 
-    public function show(int $id): JsonResponse
+    public function show(int $id)
     {
         $order = Order::with('items.product')->find($id);
 
@@ -46,19 +47,6 @@ class OrderController extends Controller
             return response()->json(['message' => 'Order not found.'], 404);
         }
 
-        return response()->json([
-            'id' => $order->id,
-            'status' => $order->status,
-            'total_amount' => $order->total_amount,
-            'fail_reason' => $order->fail_reason,
-            'items' => $order->items->map(function ($item) {
-                return [
-                    'product_id' => $item->product_id,
-                    'product_name' => $item->product->name ?? 'Unknown',
-                    'quantity' => $item->quantity,
-                    'price' => $item->price,
-                ];
-            }),
-        ]);
+        return new OrderResource($order);
     }
 }
